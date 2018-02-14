@@ -23,7 +23,7 @@ class GameScene: SKScene {
         backgroundColor = randomBackgroundColor()
         setupUI()
         
-        
+//            Since I'm using a custom font, I needed to get the name of the font to use it.
 //            for family: String in UIFont.familyNames {
 //                    print("\(family)")
 //
@@ -51,29 +51,29 @@ class GameScene: SKScene {
         // background color
         
         switch backgroundColor {
-        case SKColor.red:
-            titleLabelOne.fontColor = .white
-            titleLabelTwo.fontColor = .white
-            startLabel.fontColor = .white
-        case SKColor.yellow:
-            titleLabelOne.fontColor = .black
-            titleLabelTwo.fontColor = .black
-            startLabel.fontColor = .black
-        case SKColor.blue:
-            titleLabelOne.fontColor = .white
-            titleLabelTwo.fontColor = .white
-            startLabel.fontColor = .white
-        case SKColor.orange:
-            titleLabelOne.fontColor = .white
-            titleLabelTwo.fontColor = .white
-            startLabel.fontColor = .white
-        case SKColor.cyan:
-            titleLabelOne.fontColor = .blue
-            titleLabelTwo.fontColor = .blue
-            startLabel.fontColor = .white
-        default:
-           titleLabelOne.fontColor = .white
-        }
+            case SKColor.red:
+                titleLabelOne.fontColor = .white
+                titleLabelTwo.fontColor = .white
+                startLabel.fontColor = .white
+            case SKColor.yellow:
+                titleLabelOne.fontColor = .black
+                titleLabelTwo.fontColor = .black
+                startLabel.fontColor = .black
+            case SKColor.blue:
+                titleLabelOne.fontColor = .white
+                titleLabelTwo.fontColor = .white
+                startLabel.fontColor = .white
+            case SKColor.orange:
+                titleLabelOne.fontColor = .white
+                titleLabelTwo.fontColor = .white
+                startLabel.fontColor = .white
+            case SKColor.cyan:
+                titleLabelOne.fontColor = .blue
+                titleLabelTwo.fontColor = .blue
+                startLabel.fontColor = .white
+            default:
+               titleLabelOne.fontColor = .white
+            }
         
     }
     
@@ -85,16 +85,11 @@ class GameScene: SKScene {
          let location = touch.location(in: self)
             if startButton .contains(location){
                 let transition:SKTransition = SKTransition.moveIn(with: SKTransitionDirection.up, duration: 1.0)
-//                let scene:SKScene = MainGame(size: self.size)
-//                scene.scaleMode             = .aspectFill
-//                self.view?.presentScene(scene, transition: transition)
-                
                 if let scene = GKScene(fileNamed: "MainGame") {
                     if let sceneNode = scene.rootNode as! MainGame?{
                         sceneNode.scaleMode = .aspectFill
                         self.view?.presentScene(sceneNode, transition: transition)
                     }
-                    
                 }
             }
         }
@@ -112,7 +107,6 @@ class GameScene: SKScene {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
        
     }
-    
     
     override func update(_ currentTime: TimeInterval) {
 

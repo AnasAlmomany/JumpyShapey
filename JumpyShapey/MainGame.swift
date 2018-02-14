@@ -84,8 +84,16 @@ class MainGame: SKScene {
         
     }
     
+    func removeAllGestures(){
+        
+        //Gesture Recognizers need to be removed when we leave the scene. Just saving this for later.
+        for gesture in (self.view?.gestureRecognizers)! {
+            self.view?.removeGestureRecognizer(gesture)
+        }
+        
+    }
     
     
-    
+
 
 }
