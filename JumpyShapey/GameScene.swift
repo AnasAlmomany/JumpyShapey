@@ -11,13 +11,6 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    var entities = [GKEntity]()
-    var graphs = [String : GKGraph]()
-    
-    private var lastUpdateTime : TimeInterval = 0
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
-    
     override func sceneDidLoad() {
         // A background color is randomly selected at startup
         backgroundColor = randomBackgroundColor()
@@ -41,40 +34,37 @@ class GameScene: SKScene {
     }
     
     func setupUI(){
-        // Grab a reference to the nodes created in GameScene.sks
-        let titleLabelOne = childNode(withName: "mainLabelOne") as! SKLabelNode
-        let titleLabelTwo = childNode(withName: "mainLabelTwo") as! SKLabelNode
-        let startLabel = childNode(withName: "start") as! SKLabelNode
-        
-        
         // Set the color of the labels so they stand out against the randonly selected
         // background color
         
         switch backgroundColor {
             case SKColor.red:
-                titleLabelOne.fontColor = .white
-                titleLabelTwo.fontColor = .white
-                startLabel.fontColor = .white
+                setUIColorTo(ThisColor: .white)
             case SKColor.yellow:
-                titleLabelOne.fontColor = .black
-                titleLabelTwo.fontColor = .black
-                startLabel.fontColor = .black
+                setUIColorTo(ThisColor: .black)
             case SKColor.blue:
-                titleLabelOne.fontColor = .white
-                titleLabelTwo.fontColor = .white
-                startLabel.fontColor = .white
+                setUIColorTo(ThisColor: .white)
             case SKColor.orange:
-                titleLabelOne.fontColor = .white
-                titleLabelTwo.fontColor = .white
-                startLabel.fontColor = .white
+                setUIColorTo(ThisColor: .white)
             case SKColor.cyan:
-                titleLabelOne.fontColor = .blue
-                titleLabelTwo.fontColor = .blue
-                startLabel.fontColor = .white
+                setUIColorTo(ThisColor: .blue)
             default:
-               titleLabelOne.fontColor = .white
+                setUIColorTo(ThisColor: .white)
             }
+    }
+    
+    func setUIColorTo(ThisColor: SKColor){
+        // This method sets the UI color to stand out against the randomly selected background color
+        // In order to do this we grab a reference to the nodes created in GameScene.sks
+        guard let titleLabelOne = childNode(withName: "mainLabelOne") as? SKLabelNode else {return}
+        guard let titleLabelTwo = childNode(withName: "mainLabelTwo") as? SKLabelNode else {return}
+        guard let startLabel = childNode(withName: "start") as? SKLabelNode else {return}
+        guard let copyrightLabel = childNode(withName: "copyrightLabel") as? SKLabelNode else {return}
         
+        titleLabelOne.fontColor = ThisColor
+        titleLabelTwo.fontColor = ThisColor
+        startLabel.fontColor = ThisColor
+        copyrightLabel.fontColor = ThisColor
     }
     
     
