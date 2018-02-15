@@ -16,9 +16,11 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     var floor = SKSpriteNode()
     
     // These blank nodes are used as spawn point locations for enemy objects
-    var bottomPosition = SKNode()
-    var middlePosition = SKNode()
-    var topPosition = SKNode()
+    var positionOne = SKSpriteNode()
+    var positionTwo = SKSpriteNode()
+    var positionThree = SKSpriteNode()
+    var positionFour = SKSpriteNode()
+    var positionFive = SKSpriteNode()
     
     // Jumping flags
     var isJumping = Bool()
@@ -28,27 +30,42 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         static let Enemy: UInt32 = 1
         static let Hero: UInt32 = 2
         static let Floor: UInt32 = 4
+        static let Collectable: UInt32 = 8
     }
     
      override func sceneDidLoad() {
+  
         backgroundColor = randomBackgroundColor() // Says background - really sets entire interface color
-        
+        setupUI() // Sets up the interface with a randomly selected color scheme
+        setupNodes() // I have a small pile of nodes to setup, it get's done here
         UIApplication.shared.isIdleTimerDisabled = true // Keep the device awake
         
         physicsWorld.contactDelegate = self // Required for physics delegate calls
+
+        isJumping = false
+        isInAir = false
+        
+        spawnCircle(friend: true)
+    }
+    
+    func setupNodes(){
         
         hero = childNode(withName: "hero") as! SKSpriteNode // Main Player Node
         hero.physicsBody?.categoryBitMask = PhysicsCatagory.Hero
+        hero.name = "hero"
         hero.physicsBody?.contactTestBitMask = PhysicsCatagory.Enemy | PhysicsCatagory.Floor
-        
         
         floor = childNode(withName: "floor") as! SKSpriteNode // The game scene ground object
         floor.physicsBody?.categoryBitMask = PhysicsCatagory.Floor
         floor.physicsBody?.contactTestBitMask = PhysicsCatagory.Hero
         
-        setupUI() // Sets up the interface with a randomly selected color scheme
-        isJumping = false
-        isInAir = false
+        positionOne = childNode(withName: "pOne") as! SKSpriteNode
+        positionTwo = childNode(withName: "pTwo") as! SKSpriteNode
+        positionThree = childNode(withName: "pThree") as! SKSpriteNode
+        positionFour = childNode(withName: "pFour") as! SKSpriteNode
+        positionFive = childNode(withName: "pFive") as! SKSpriteNode
+    
+
     }
     
     
@@ -136,6 +153,35 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
 
     override func update(_ currentTime: TimeInterval) {
 
+//        detectContactBetweenPlayerAndCollectable()
+    }
+    
+    func spawnCircle(friend: Bool){
+        // Circle Sprite
+        let circle = SKShapeNode(circleOfRadius: 50)
+        circle.fillColor = SKColor.white
+        circle.strokeColor = SKColor.white
+        circle.position = positionOne.position
+        circle.physicsBody = SKPhysicsBody(circleOfRadius: 50)
+       
+        
+        if friend {
+            circle.physicsBody?.categoryBitMask = PhysicsCatagory.Collectable
+            circle.physicsBody?.contactTestBitMask = PhysicsCatagory.Hero
+            circle.name = "circleFriend"
+        }else {
+//            circle.physicsBody?.categoryBitMask = PhysicsCatagory.Enemy
+//            circle.physicsBody?.contactTestBitMask = PhysicsCatagory.Hero
+            circle.name = "circleEnemy"
+        }
+        
+        
+        addChild(circle)
+        // Circle Sprite Actions
+        let moveForward: SKAction = SKAction.moveTo(x: -size.width, duration: 2)
+        let removeSelf: SKAction = SKAction.removeFromParent()
+        let sequence: SKAction = SKAction.sequence([moveForward,removeSelf])
+        circle.run(sequence)
         
     }
     
@@ -146,7 +192,10 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         
             // I don't want the hero jumping nine hundred feet in the air, so this flag
             // prevents it from doing so
-            if firstBody.categoryBitMask == PhysicsCatagory.Hero && secondBody.categoryBitMask == PhysicsCatagory.Floor {
+        
+            if firstBody.categoryBitMask == PhysicsCatagory.Hero && secondBody.categoryBitMask == PhysicsCatagory.Floor || firstBody.categoryBitMask == PhysicsCatagory.Floor && secondBody.categoryBitMask == PhysicsCatagory.Hero  {
+                
+                // Hero & Floor
                 if firstBody.categoryBitMask == PhysicsCatagory.Hero {
                     isJumping = false
                     isInAir = false
@@ -156,6 +205,21 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
                 }
             }
         
+
+            // Why not check a different way? I've been toying with using this idea as it seems a little more succinct
+            // Additionally, since I'm dealing with very gentle physics contacts here, I don't like casting and
+            // recasting objects that often. This seems to work the best given the contact scenario I'm dealing
+            // with here.
+            if firstBody.node?.name == "hero" && secondBody.node?.name == "circleFriend" {
+                secondBody.node?.physicsBody?.categoryBitMask = 0
+                secondBody.node?.removeFromParent()
+            }
+
+    }
+
+    
+    func gameOver(){
+        print("Game Over")
     }
     
     
