@@ -18,6 +18,13 @@
 		0B7C585E2033C61E000CA116 /* MainGame.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B7C585D2033C61E000CA116 /* MainGame.sks */; };
 		0B7C58602033C630000CA116 /* MainGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C585F2033C630000CA116 /* MainGame.swift */; };
 		4CA0BAEF2034858500BDB76B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0BAEE2034858500BDB76B /* Assets.xcassets */; };
+		4CD8C3CF20361DCC00FCDC86 /* GameOverScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CD8C3CE20361DCC00FCDC86 /* GameOverScene.sks */; };
+		4CD8C3D120361DDF00FCDC86 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD8C3D020361DDF00FCDC86 /* GameOverScene.swift */; };
+		4CD8C3D420363EEF00FCDC86 /* blipstream.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4CD8C3D320363EEF00FCDC86 /* blipstream.mp3 */; };
+		4CD8C3D620363FD200FCDC86 /* beep-10.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4CD8C3D520363FD100FCDC86 /* beep-10.mp3 */; };
+		4CD8C3D8203640FE00FCDC86 /* notmyship.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4CD8C3D7203640FE00FCDC86 /* notmyship.mp3 */; };
+		4CD8C3DB2036411B00FCDC86 /* jump_03.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4CD8C3D92036411B00FCDC86 /* jump_03.wav */; };
+		4CD8C3DC2036411B00FCDC86 /* jump_01.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4CD8C3DA2036411B00FCDC86 /* jump_01.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +41,13 @@
 		0B7C585D2033C61E000CA116 /* MainGame.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainGame.sks; sourceTree = "<group>"; };
 		0B7C585F2033C630000CA116 /* MainGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGame.swift; sourceTree = "<group>"; };
 		4CA0BAEE2034858500BDB76B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4CD8C3CE20361DCC00FCDC86 /* GameOverScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverScene.sks; sourceTree = "<group>"; };
+		4CD8C3D020361DDF00FCDC86 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
+		4CD8C3D320363EEF00FCDC86 /* blipstream.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = blipstream.mp3; sourceTree = "<group>"; };
+		4CD8C3D520363FD100FCDC86 /* beep-10.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "beep-10.mp3"; sourceTree = "<group>"; };
+		4CD8C3D7203640FE00FCDC86 /* notmyship.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = notmyship.mp3; sourceTree = "<group>"; };
+		4CD8C3D92036411B00FCDC86 /* jump_03.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jump_03.wav; sourceTree = "<group>"; };
+		4CD8C3DA2036411B00FCDC86 /* jump_01.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jump_01.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,9 +80,12 @@
 		0B696FDE2033B2B3001D92CC /* JumpyShapey */ = {
 			isa = PBXGroup;
 			children = (
+				4CD8C3D220363ED800FCDC86 /* Audio */,
 				0B696FF72033B33A001D92CC /* Fonts */,
 				0B696FDF2033B2B3001D92CC /* AppDelegate.swift */,
 				0B696FE12033B2B3001D92CC /* GameScene.sks */,
+				4CD8C3CE20361DCC00FCDC86 /* GameOverScene.sks */,
+				4CD8C3D020361DDF00FCDC86 /* GameOverScene.swift */,
 				0B696FE32033B2B3001D92CC /* Actions.sks */,
 				0B696FE52033B2B3001D92CC /* GameScene.swift */,
 				0B7C585D2033C61E000CA116 /* MainGame.sks */,
@@ -88,6 +105,18 @@
 				0B696FF82033B345001D92CC /* blocks.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		4CD8C3D220363ED800FCDC86 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				4CD8C3DA2036411B00FCDC86 /* jump_01.wav */,
+				4CD8C3D92036411B00FCDC86 /* jump_03.wav */,
+				4CD8C3D7203640FE00FCDC86 /* notmyship.mp3 */,
+				4CD8C3D520363FD100FCDC86 /* beep-10.mp3 */,
+				4CD8C3D320363EEF00FCDC86 /* blipstream.mp3 */,
+			);
+			path = Audio;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,11 +179,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B7C585E2033C61E000CA116 /* MainGame.sks in Resources */,
+				4CD8C3DB2036411B00FCDC86 /* jump_03.wav in Resources */,
+				4CD8C3D620363FD200FCDC86 /* beep-10.mp3 in Resources */,
 				0B696FEB2033B2B3001D92CC /* Main.storyboard in Resources */,
 				0B696FE22033B2B3001D92CC /* GameScene.sks in Resources */,
 				0B696FF92033B345001D92CC /* blocks.ttf in Resources */,
+				4CD8C3D8203640FE00FCDC86 /* notmyship.mp3 in Resources */,
+				4CD8C3CF20361DCC00FCDC86 /* GameOverScene.sks in Resources */,
 				0B696FF02033B2B3001D92CC /* LaunchScreen.storyboard in Resources */,
+				4CD8C3D420363EEF00FCDC86 /* blipstream.mp3 in Resources */,
 				4CA0BAEF2034858500BDB76B /* Assets.xcassets in Resources */,
+				4CD8C3DC2036411B00FCDC86 /* jump_01.wav in Resources */,
 				0B696FE42033B2B3001D92CC /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,6 +201,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CD8C3D120361DDF00FCDC86 /* GameOverScene.swift in Sources */,
 				0B7C58602033C630000CA116 /* MainGame.swift in Sources */,
 				0B696FE62033B2B3001D92CC /* GameScene.swift in Sources */,
 				0B696FE82033B2B3001D92CC /* GameViewController.swift in Sources */,
@@ -314,7 +350,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jjustind.jumpyshapey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -330,7 +366,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.jjustind.jumpyshapey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
