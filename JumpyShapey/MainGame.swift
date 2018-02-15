@@ -26,6 +26,9 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     var isJumping = Bool()
     var isInAir = Bool()
     
+    // Array of Enemy/Collectable spawm points
+    var spawnPoints = Array<SKSpriteNode>()
+    
     struct PhysicsCatagory {
         static let Enemy: UInt32 = 1
         static let Hero: UInt32 = 2
@@ -59,11 +62,15 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         floor.physicsBody?.categoryBitMask = PhysicsCatagory.Floor
         floor.physicsBody?.contactTestBitMask = PhysicsCatagory.Hero
         
+        // These objects provide me with a set number of spawn locations to choose from
         positionOne = childNode(withName: "pOne") as! SKSpriteNode
         positionTwo = childNode(withName: "pTwo") as! SKSpriteNode
         positionThree = childNode(withName: "pThree") as! SKSpriteNode
         positionFour = childNode(withName: "pFour") as! SKSpriteNode
         positionFive = childNode(withName: "pFive") as! SKSpriteNode
+        
+        // Spawn point location array is populated here:
+        spawnPoints = [positionOne, positionTwo, positionThree, positionFour, positionFive]
     
 
     }
@@ -211,7 +218,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
             // recasting objects that often. This seems to work the best given the contact scenario I'm dealing
             // with here.
             if firstBody.node?.name == "hero" && secondBody.node?.name == "circleFriend" {
-                secondBody.node?.physicsBody?.categoryBitMask = 0
+                secondBody.node?.physicsBody?.categoryBitMask = 0 // This is done to prevent the player from being instantly pushed back
                 secondBody.node?.removeFromParent()
             }
 
