@@ -34,6 +34,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         static let Hero: UInt32 = 2
         static let Floor: UInt32 = 4
         static let Collectable: UInt32 = 8
+        static let None: UInt32 = 10
     }
     
      override func sceneDidLoad() {
@@ -218,7 +219,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
             // recasting objects that often. This seems to work the best given the contact scenario I'm dealing
             // with here.
             if firstBody.node?.name == "hero" && secondBody.node?.name == "circleFriend" {
-                secondBody.node?.physicsBody?.categoryBitMask = 0 // This is done to prevent the player from being instantly pushed back
+                secondBody.node?.physicsBody?.categoryBitMask = PhysicsCatagory.None // This is done to prevent the player from being instantly pushed back
                 secondBody.node?.removeFromParent()
             }
 
