@@ -49,7 +49,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         isJumping = false
         isInAir = false
         
-        spawnCircle(friend: true)
+        spawnCircle(collectable: true)
     }
     
     func setupNodes(){
@@ -164,7 +164,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
 //        detectContactBetweenPlayerAndCollectable()
     }
     
-    func spawnCircle(friend: Bool){
+    func spawnCircle(collectable: Bool){
         // Circle Sprite
         let circle = SKShapeNode(circleOfRadius: 50)
         circle.fillColor = SKColor.white
@@ -173,10 +173,10 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         circle.physicsBody = SKPhysicsBody(circleOfRadius: 50)
        
         
-        if friend {
+        if collectable {
             circle.physicsBody?.categoryBitMask = PhysicsCatagory.Collectable
             circle.physicsBody?.contactTestBitMask = PhysicsCatagory.Hero
-            circle.name = "circleFriend"
+            circle.name = "circleCollectable"
         }else {
 //            circle.physicsBody?.categoryBitMask = PhysicsCatagory.Enemy
 //            circle.physicsBody?.contactTestBitMask = PhysicsCatagory.Hero
@@ -218,7 +218,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
             // Additionally, since I'm dealing with very gentle physics contacts here, I don't like casting and
             // recasting objects that often. This seems to work the best given the contact scenario I'm dealing
             // with here.
-            if firstBody.node?.name == "hero" && secondBody.node?.name == "circleFriend" {
+            if firstBody.node?.name == "hero" && secondBody.node?.name == "circleCollectable" {
                 secondBody.node?.physicsBody?.categoryBitMask = PhysicsCatagory.None // This is done to prevent the player from being instantly pushed back
                 secondBody.node?.removeFromParent()
             }
