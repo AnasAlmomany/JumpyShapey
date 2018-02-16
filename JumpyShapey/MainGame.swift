@@ -65,16 +65,8 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         isJumping = false
         isInAir = false
         gamePaused = false
-        
         currentScore = 0
-        
-
-        
         playAudio()
-        
-        
-        
-        
     }
     
     func playAudio(){
@@ -377,6 +369,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
             defaults.set(currentScore, forKey: "highScore")
         }
         
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "reportScore"), object: nil)
         
         
         stopAllSpritesAndActions(name: "circleCollectable")

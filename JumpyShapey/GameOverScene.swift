@@ -25,9 +25,6 @@ class GameOverScene: SKScene {
         guard let highScore = defaults.value(forKey: "highScore") else {return}
         highScoreLabel.text = "\(highScore)"
 
-        
-        
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

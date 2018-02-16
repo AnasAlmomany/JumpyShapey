@@ -60,17 +60,22 @@ class GameScene: SKScene {
         guard let titleLabelTwo = childNode(withName: "mainLabelTwo") as? SKLabelNode else {return}
         guard let startLabel = childNode(withName: "start") as? SKLabelNode else {return}
         guard let copyrightLabel = childNode(withName: "copyrightLabel") as? SKLabelNode else {return}
+        guard let directionsLabel = childNode(withName: "directions") as? SKLabelNode else {return}
+        guard let leaderboardsLabel = childNode(withName: "leaderboards") as? SKLabelNode else {return}
+        
         
         titleLabelOne.fontColor = ThisColor
         titleLabelTwo.fontColor = ThisColor
         startLabel.fontColor = ThisColor
         copyrightLabel.fontColor = ThisColor
+        directionsLabel.fontColor = ThisColor
+        leaderboardsLabel.fontColor = ThisColor
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let startButton = childNode(withName: "start") else {return}
-        
+        guard let leaderBoardButton = childNode(withName: "leaderboards") else {return}
         for touch in touches {
          let location = touch.location(in: self)
             if startButton .contains(location){
@@ -81,6 +86,12 @@ class GameScene: SKScene {
                         self.view?.presentScene(sceneNode, transition: transition)
                     }
                 }
+            }
+            
+            if leaderBoardButton .contains(location){
+                
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "leaderboard"), object: nil)
+                
             }
         }
     }
