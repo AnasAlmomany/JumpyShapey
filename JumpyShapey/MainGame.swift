@@ -28,6 +28,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     // Jumping flags
     var isJumping = Bool()
     var isInAir = Bool()
+    var isThirdJump = Bool()
     
     // Pause flag, saving for later
     var gamePaused = Bool()
@@ -65,6 +66,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         isJumping = false
         isInAir = false
         gamePaused = false
+        isThirdJump = false
         currentScore = 0
         playAudio()
     }
@@ -210,35 +212,40 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleGesture(tap:)))
         view?.addGestureRecognizer(tapGesture)
         
-        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(double:)))
-        doubleTapGesture.numberOfTapsRequired = 2
-        view?.addGestureRecognizer(doubleTapGesture)
+//        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(double:)))
+//        doubleTapGesture.numberOfTapsRequired = 2
+//        view?.addGestureRecognizer(doubleTapGesture)
     }
     
     @objc func handleGesture(tap: UITapGestureRecognizer){
-//        let heroNode = childNode(withName: "hero")
         
-        isInAir = false
+        if isThirdJump {
+            hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 450.0))
+            let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_03", waitForCompletion: false)
+            self.run(jumpAudio, withKey: "jumpThree")
+            isThirdJump = false
+        }
+        
+        if isInAir == true {
+            hero.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
+            hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 450.0))
+            let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_03", waitForCompletion: false)
+            self.run(jumpAudio, withKey: "jumpTwo")
+            isInAir = false
+            isThirdJump = true
+        }
+
         if !isJumping{
-            hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 300.0))
+            hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 375.0))
+
             let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_01", waitForCompletion: false)
             self.run(jumpAudio, withKey: "jumpOne")
             isJumping = true
             isInAir = true
         }
+        
     }
     
-    @objc func handleDoubleTap(double: UIGestureRecognizer){
-        
-        if (isInAir){
-            hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 300.0))
-            let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_03", waitForCompletion: false)
-            self.run(jumpAudio, withKey: "jumpOne")
-
-            isInAir = false
-        }
-        
-    }
     func removeAllGestures(){
         
         //Gesture Recognizers need to be removed when we leave the scene. Just saving this for later.
@@ -264,8 +271,12 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         circle.strokeColor = SKColor.white
         circle.position = currentSpawnPoint.position
         circle.physicsBody = SKPhysicsBody(circleOfRadius: 50)
-       
-        circle.physicsBody?.restitution = 1.2
+        
+        // I want to randomize just how bouncy these circles are.
+        let bouncyArray = [0.9,1.1,1.2,1.3]
+        let randomRestitution = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: bouncyArray)
+        let currentRestitution = randomRestitution[0] as! CGFloat
+        circle.physicsBody?.restitution = currentRestitution
         if currentlyCollectable == 0 {
             circle.physicsBody?.categoryBitMask = PhysicsCatagory.Collectable
             circle.physicsBody?.contactTestBitMask = PhysicsCatagory.Hero
@@ -275,9 +286,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
             circle.physicsBody?.categoryBitMask = PhysicsCatagory.Enemy
             circle.physicsBody?.contactTestBitMask = PhysicsCatagory.Hero
             circle.name = "circleEnemy"
-            
-//            let colorArray = [ 0 SKColor.white, 1 SKColor.yellow,  2 SKColor.cyan, 3 SKColor.blue,
-//              4 SKColor.black, 5 SKColor.purple, 6 SKColor.green, 7 SKColor.orange, 8 SKColor.red]
+        
             
             switch hero.color {
             case selectedColor(number: 0):
@@ -305,13 +314,32 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
             
         }
         
-//        circle.physicsBody?.restitution = 1.1
         addChild(circle)
         // Circle Sprite Actions
+        
+        // There is an issue if an enemy circle spawns at position four in the spawnPoints array
+        // As this is the top position in the stack of possible spawn points, the circle can land right on
+        // the user, providing an unfair game over. To solve this, enemy circles cannot spawn from position number four
+        // AKA - the top spawn point
+        
+        if circle.name == "circleEnemy" && circle.position.y == spawnPoints[4].position.y {
+            let spawnPointThree: SKSpriteNode = spawnPoints[3]
+            circle.position = spawnPointThree.position
+        }
+        
+//        let randomSpeed = GKRandomDistribution(lowestValue: 2, highestValue: 4)
         let moveForward: SKAction = SKAction.moveTo(x: -size.width, duration: 2)
         let removeSelf: SKAction = SKAction.removeFromParent()
         let sequence: SKAction = SKAction.sequence([moveForward,removeSelf])
         circle.run(sequence)
+        
+        
+        if circle.position.y != spawnPoints[4].position.y{
+            
+        }else {
+            
+        }
+        
         
     }
     
@@ -361,6 +389,8 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
 
     
     func gameOver(){
+        guard let ceilingNode = childNode(withName: "ceiling") as? SKSpriteNode else { return }
+        ceilingNode.removeFromParent()
         print("Game Over")
         let defaults = UserDefaults.standard
         defaults.set(currentScore, forKey: "gameOverScore")
@@ -416,6 +446,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         enumerateChildNodes(withName: name) { (node, stop) in
             node.isPaused = true
             node.physicsBody?.isDynamic = false
+            node.physicsBody?.restitution = 1.0 // The cirlces don't need extra bouncyness for this part. 
         }
     }
     

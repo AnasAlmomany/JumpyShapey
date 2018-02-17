@@ -28,20 +28,26 @@ class GameOverScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let startButton = childNode(withName: "homeButton") else {return}
+        guard let startButton = childNode(withName: "homeButton") as? SKLabelNode else {return}
         
         for touch in touches {
             let location = touch.location(in: self)
             if startButton .contains(location){
+                startButton.fontColor = .green
                 let transition:SKTransition = SKTransition.moveIn(with: SKTransitionDirection.up, duration: 1.0)
-                if let scene = GKScene(fileNamed: "GameScene") {
-                    if let sceneNode = scene.rootNode as! GameScene?{
+                if let scene = GKScene(fileNamed: "MainGame") {
+                    if let sceneNode = scene.rootNode as! MainGame?{
                         sceneNode.scaleMode = .aspectFill
                         self.view?.presentScene(sceneNode, transition: transition)
                     }
                 }
             }
         }
+    }
+    
+     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let startButton = childNode(withName: "homeButton") as? SKLabelNode else {return}
+        startButton.fontColor = .white
     }
 
 }

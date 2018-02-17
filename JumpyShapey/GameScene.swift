@@ -11,6 +11,9 @@ import GameplayKit
 
 class GameScene: SKScene {
     
+    var currentButtonColor:SKColor = SKColor()
+    var isExpanding: Bool = Bool()
+    
     override func sceneDidLoad() {
         // A background color is randomly selected at startup
         backgroundColor = randomBackgroundColor()
@@ -24,6 +27,7 @@ class GameScene: SKScene {
 //                        print("== \(names)")
 //                    }
 //                }
+        isExpanding = false
         
     }
     
@@ -70,15 +74,24 @@ class GameScene: SKScene {
         copyrightLabel.fontColor = ThisColor
         directionsLabel.fontColor = ThisColor
         leaderboardsLabel.fontColor = ThisColor
+        
+        // I reference this label color so I can use it to restore the buttons on screen to their original color state
+        // after being tapped.
+        
+        currentButtonColor = ThisColor
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let startButton = childNode(withName: "start") else {return}
-        guard let leaderBoardButton = childNode(withName: "leaderboards") else {return}
+        
+        guard let startButton = childNode(withName: "start") as? SKLabelNode else {return}
+        guard let leaderBoardButton = childNode(withName: "leaderboards") as? SKLabelNode else {return}
+        isExpanding = true
         for touch in touches {
          let location = touch.location(in: self)
             if startButton .contains(location){
+                startButton.fontColor = .green
+                startButton.setScale(2.0)
                 let transition:SKTransition = SKTransition.moveIn(with: SKTransitionDirection.up, duration: 1.0)
                 if let scene = GKScene(fileNamed: "MainGame") {
                     if let sceneNode = scene.rootNode as! MainGame?{
@@ -89,7 +102,7 @@ class GameScene: SKScene {
             }
             
             if leaderBoardButton .contains(location){
-                
+                leaderBoardButton.fontColor = .green
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "leaderboard"), object: nil)
                 
             }
@@ -98,18 +111,28 @@ class GameScene: SKScene {
     
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-       
+        
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-      
+        guard let startButton = childNode(withName: "start") as? SKLabelNode else {return}
+        guard let leaderBoardButton = childNode(withName: "leaderboards") as? SKLabelNode else {return}
+        
+        leaderBoardButton.fontColor = currentButtonColor
+        startButton.fontColor = currentButtonColor
+        startButton.setScale(1.0)
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-       
+        guard let startButton = childNode(withName: "start") as? SKLabelNode else {return}
+        guard let leaderBoardButton = childNode(withName: "leaderboards") as? SKLabelNode else {return}
+        
+        leaderBoardButton.fontColor = currentButtonColor
+        startButton.fontColor = currentButtonColor
+        startButton.setScale(1.0)
     }
     
     override func update(_ currentTime: TimeInterval) {
-
+        
     }
 }
