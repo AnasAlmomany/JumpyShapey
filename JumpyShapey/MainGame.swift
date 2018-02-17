@@ -220,6 +220,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     @objc func handleGesture(tap: UITapGestureRecognizer){
         
         if isThirdJump {
+             hero.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
             hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 450.0))
             let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_03", waitForCompletion: false)
             self.run(jumpAudio, withKey: "jumpThree")
@@ -237,7 +238,6 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
 
         if !isJumping{
             hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 375.0))
-
             let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_01", waitForCompletion: false)
             self.run(jumpAudio, withKey: "jumpOne")
             isJumping = true
