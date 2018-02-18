@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserDefaults.standard.register(defaults: ["gameOverScore":0])
         UserDefaults.standard.register(defaults: ["highScore":0])
 //        UserDefaults.standard.register(defaults: ["musicToggle":true])
+        
+        Fabric.with([Crashlytics.self])
         
         return true
     }

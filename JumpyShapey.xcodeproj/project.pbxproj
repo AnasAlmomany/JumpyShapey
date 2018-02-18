@@ -17,6 +17,8 @@
 		0B696FF92033B345001D92CC /* blocks.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B696FF82033B345001D92CC /* blocks.ttf */; };
 		0B7C585E2033C61E000CA116 /* MainGame.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B7C585D2033C61E000CA116 /* MainGame.sks */; };
 		0B7C58602033C630000CA116 /* MainGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C585F2033C630000CA116 /* MainGame.swift */; };
+		0BF764212039078900B54A9C /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BF7641F2039078800B54A9C /* Crashlytics.framework */; };
+		0BF764222039078900B54A9C /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BF764202039078800B54A9C /* Fabric.framework */; };
 		4CA0BAEF2034858500BDB76B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CA0BAEE2034858500BDB76B /* Assets.xcassets */; };
 		4CD8C3CF20361DCC00FCDC86 /* GameOverScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4CD8C3CE20361DCC00FCDC86 /* GameOverScene.sks */; };
 		4CD8C3D120361DDF00FCDC86 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD8C3D020361DDF00FCDC86 /* GameOverScene.swift */; };
@@ -40,6 +42,8 @@
 		0B696FF82033B345001D92CC /* blocks.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = blocks.ttf; sourceTree = "<group>"; };
 		0B7C585D2033C61E000CA116 /* MainGame.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainGame.sks; sourceTree = "<group>"; };
 		0B7C585F2033C630000CA116 /* MainGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGame.swift; sourceTree = "<group>"; };
+		0BF7641F2039078800B54A9C /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
+		0BF764202039078800B54A9C /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		4CA0BAEE2034858500BDB76B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4CD8C3CE20361DCC00FCDC86 /* GameOverScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverScene.sks; sourceTree = "<group>"; };
 		4CD8C3D020361DDF00FCDC86 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
@@ -55,6 +59,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BF764212039078900B54A9C /* Crashlytics.framework in Frameworks */,
+				0BF764222039078900B54A9C /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +101,8 @@
 				4CA0BAEE2034858500BDB76B /* Assets.xcassets */,
 				0B696FEE2033B2B3001D92CC /* LaunchScreen.storyboard */,
 				0B696FF12033B2B3001D92CC /* Info.plist */,
+				0BF7641F2039078800B54A9C /* Crashlytics.framework */,
+				0BF764202039078800B54A9C /* Fabric.framework */,
 			);
 			path = JumpyShapey;
 			sourceTree = "<group>";
@@ -129,6 +137,7 @@
 				0B696FD82033B2B3001D92CC /* Sources */,
 				0B696FD92033B2B3001D92CC /* Frameworks */,
 				0B696FDA2033B2B3001D92CC /* Resources */,
+				0BF7641E2039076F00B54A9C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -195,6 +204,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0BF7641E2039076F00B54A9C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run de6905d8c98b1467e812ea1630ef1f2ce6acefdb 6561c0243a587ce8491e1b04ff80fb7fc58073407069d22c934593ff7adcc2b4\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0B696FD82033B2B3001D92CC /* Sources */ = {
@@ -343,7 +368,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 64783LG3JR;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = JumpyShapey/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -360,6 +390,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 64783LG3JR;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = JumpyShapey/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -9,6 +9,7 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import Crashlytics
 
 class GameOverScene: SKScene {
     
@@ -37,6 +38,7 @@ class GameOverScene: SKScene {
                 let transition:SKTransition = SKTransition.moveIn(with: SKTransitionDirection.up, duration: 1.0)
                 if let scene = GKScene(fileNamed: "MainGame") {
                     if let sceneNode = scene.rootNode as! MainGame?{
+                        Answers.logCustomEvent(withName: "Game Restarted", customAttributes: [:])
                         sceneNode.scaleMode = .aspectFill
                         self.view?.presentScene(sceneNode, transition: transition)
                     }

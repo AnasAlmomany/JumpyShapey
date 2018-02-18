@@ -10,6 +10,7 @@ import UIKit
 import SpriteKit
 import GameplayKit
 import AVFoundation
+import Crashlytics
 
 class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     
@@ -29,6 +30,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     var isJumping = Bool()
     var isInAir = Bool()
     var isThirdJump = Bool()
+    var gameIsRunning = Bool()
     
     // Pause flag, saving for later
     var gamePaused = Bool()
@@ -63,10 +65,12 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         
         physicsWorld.contactDelegate = self // Required for physics delegate calls
 
-        isJumping = false
-        isInAir = false
-        gamePaused = false
-        isThirdJump = false
+        isJumping = false // First jump flag
+        isInAir = false // Second jump flag
+        gamePaused = false // Game Paused or not -> Not currently used
+        isThirdJump = false // Third jump flag
+        gameIsRunning = false // This flag prevents the UIGestureRecognizer from
+        // firing when gameplay is not active.
         currentScore = 0
         playAudio()
     }
@@ -135,6 +139,10 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     
     func setupUI(){
         
+//        let colorArray = [0 SKColor.white, 1 SKColor.yellow, 2 SKColor.cyan, 3 SKColor.blue, 4 SKColor.black, 5 SKColor.purple, 6 SKColor.green, 7 SKColor.orange, 8 SKColor.red]
+//
+        
+        
         switch backgroundColor {
         case SKColor.red:
             setUIColorElements(FloorColor: selectedColor(number: 2), PlayerColor: selectedColor(number: 1), ScoreColor: selectedColor(number: 0), CountDownColor: selectedColor(number: 0))
@@ -176,7 +184,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
         
     }
     func gameStart(){
-        
+        gameIsRunning = true
         hero.physicsBody?.isDynamic = true
         let infiniteSpawn: SKAction = SKAction.run {
             self.spawnCircle()
@@ -211,38 +219,40 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
     func setupGestureRecognizers() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleGesture(tap:)))
         view?.addGestureRecognizer(tapGesture)
-        
-//        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(double:)))
-//        doubleTapGesture.numberOfTapsRequired = 2
-//        view?.addGestureRecognizer(doubleTapGesture)
     }
     
     @objc func handleGesture(tap: UITapGestureRecognizer){
-        
-        if isThirdJump {
-             hero.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
-            hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 450.0))
-            let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_03", waitForCompletion: false)
-            self.run(jumpAudio, withKey: "jumpThree")
-            isThirdJump = false
+        if gameIsRunning {
+            if isThirdJump {
+                Answers.logCustomEvent(withName: "Jump Three", customAttributes: [:])
+                hero.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
+                hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 450.0))
+                let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_03", waitForCompletion: false)
+                self.run(jumpAudio, withKey: "jumpThree")
+                isThirdJump = false
+            }
+            
+            if isInAir == true {
+                Answers.logCustomEvent(withName: "Jump Two", customAttributes: [:])
+                hero.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
+                hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 450.0))
+                let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_03", waitForCompletion: false)
+                self.run(jumpAudio, withKey: "jumpTwo")
+                isInAir = false
+                isThirdJump = true
+            }
+            
+            if !isJumping{
+                Answers.logCustomEvent(withName: "Jump One", customAttributes: [:])
+                hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 375.0))
+                let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_01", waitForCompletion: false)
+                self.run(jumpAudio, withKey: "jumpOne")
+                isJumping = true
+                isInAir = true
+            }
         }
         
-        if isInAir == true {
-            hero.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
-            hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 450.0))
-            let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_03", waitForCompletion: false)
-            self.run(jumpAudio, withKey: "jumpTwo")
-            isInAir = false
-            isThirdJump = true
-        }
-
-        if !isJumping{
-            hero.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 375.0))
-            let jumpAudio: SKAction = SKAction.playSoundFileNamed("jump_01", waitForCompletion: false)
-            self.run(jumpAudio, withKey: "jumpOne")
-            isJumping = true
-            isInAir = true
-        }
+        
         
     }
     
@@ -257,7 +267,6 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
 
     override func update(_ currentTime: TimeInterval) {
 
-//        detectContactBetweenPlayerAndCollectable()
     }
     
     func spawnCircle(){
@@ -287,26 +296,36 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
             circle.physicsBody?.contactTestBitMask = PhysicsCatagory.Hero
             circle.name = "circleEnemy"
         
+            //        let colorArray = [0 SKColor.white, 1 SKColor.yellow, 2 SKColor.cyan, 3 SKColor.blue, 4 SKColor.black, 5 SKColor.purple, 6 SKColor.green, 7 SKColor.orange, 8 SKColor.red]
+            //
             
             switch hero.color {
             case selectedColor(number: 0):
-                circle.fillColor = selectedColor(number: 3)
+                circle.fillColor = selectedColor(number: 7)
+                circle.strokeColor = selectedColor(number: 7)
             case selectedColor(number: 1):
-                circle.fillColor = selectedColor(number: 6)
+                circle.fillColor = selectedColor(number: 3)
+                circle.strokeColor = selectedColor(number: 3)
             case selectedColor(number: 2):
                 circle.fillColor = selectedColor(number: 5)
+                circle.strokeColor = selectedColor(number: 5)
             case selectedColor(number: 3):
                 circle.fillColor = selectedColor(number: 7)
+                circle.strokeColor = selectedColor(number: 7)
             case selectedColor(number: 4):
                 circle.fillColor = selectedColor(number: 1)
+                circle.strokeColor = selectedColor(number: 1)
             case selectedColor(number: 5):
                 circle.fillColor = selectedColor(number: 0)
+                circle.strokeColor = selectedColor(number: 0)
             case selectedColor(number: 6):
-                circle.fillColor = selectedColor(number: 8)
+                circle.fillColor = selectedColor(number: 3)
+                circle.strokeColor = selectedColor(number: 3)
             case selectedColor(number: 7):
-                circle.fillColor = selectedColor(number: 1)
+                circle.fillColor = selectedColor(number: 0)
+                circle.strokeColor = selectedColor(number: 0)
             case selectedColor(number: 8):
-                circle.fillColor = selectedColor(number: 7)
+                circle.fillColor = selectedColor(number: 5)
             default:
                 break
             
@@ -357,9 +376,13 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
             if firstBody.categoryBitMask == PhysicsCatagory.Hero {
                 isJumping = false
                 isInAir = false
+                isThirdJump = false
+                hero.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
             }else if firstBody.categoryBitMask == PhysicsCatagory.Floor{
                 isJumping = false
                 isInAir = false
+                isThirdJump = false
+                hero.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
             }
         }
     
@@ -389,6 +412,7 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
 
     
     func gameOver(){
+        gameIsRunning = false
         guard let ceilingNode = childNode(withName: "ceiling") as? SKSpriteNode else { return }
         ceilingNode.removeFromParent()
         print("Game Over")
@@ -428,6 +452,8 @@ class MainGame: SKScene, SKPhysicsContactDelegate, UIGestureRecognizerDelegate {
                 sceneNode.scaleMode = .aspectFill
                 self.audioPlayer.stop()
                 self.resetSceneVariables()
+                self.removeAllGestures()
+                Answers.logCustomEvent(withName: "Game Over", customAttributes: [:])
                 self.view?.presentScene(sceneNode, transition: transition)
             }
         }
