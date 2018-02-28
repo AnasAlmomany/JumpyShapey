@@ -67,6 +67,9 @@ class GameScene: SKScene {
         guard let copyrightLabel = childNode(withName: "copyrightLabel") as? SKLabelNode else {return}
         guard let directionsLabel = childNode(withName: "directions") as? SKLabelNode else {return}
         guard let leaderboardsLabel = childNode(withName: "leaderboards") as? SKLabelNode else {return}
+        guard let tapToJumpLabel = childNode(withName: "tapToJump") as? SKLabelNode else {return}
+        guard let avoidLabel = childNode(withName: "avoid") as? SKLabelNode else {return}
+        
         
         
         titleLabelOne.fontColor = ThisColor
@@ -75,7 +78,8 @@ class GameScene: SKScene {
         copyrightLabel.fontColor = ThisColor
         directionsLabel.fontColor = ThisColor
         leaderboardsLabel.fontColor = ThisColor
-        
+        tapToJumpLabel.fontColor = ThisColor
+        avoidLabel.fontColor = ThisColor
         // I reference this label color so I can use it to restore the buttons on screen to their original color state
         // after being tapped.
         
